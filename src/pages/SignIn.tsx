@@ -6,6 +6,8 @@ import Form from '../components/Form';
 import Modal from '../components/Modal';
 import Loader from '../components/Loader';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const SignIn = ({ onSignIn }: { onSignIn: () => void }) => {
   const dispatch = useDispatch();
@@ -20,11 +22,17 @@ const SignIn = ({ onSignIn }: { onSignIn: () => void }) => {
 
     try {
       const { token } = await signIn(email, password);
-      console.log('Token received:', token); // Debug log
+      // console.log('Token received:', token); // Debug log
       dispatch(setToken(token));
       localStorage.setItem('token', token);
       onSignIn(); // Trigger the re-render in App component
-      navigate('/dashboard'); // Redirect to dashboard
+
+      toast("Login Successfully. Redirecting to Dashboard...")
+      
+      setTimeout(() => {
+        navigate("/dashboard")
+      }, 2000);
+      // navigate('/dashboard'); // Redirect to dashboard
     } catch (error) {
       console.error('Error during sign in:', error); // Debug log
       setErrorMessage('Invalid credentials. Please try again.');
@@ -54,6 +62,7 @@ const SignIn = ({ onSignIn }: { onSignIn: () => void }) => {
         </p>
 
         {errorMessage && <Modal message={errorMessage} onClose={handleCloseModal} />}
+        <ToastContainer/>
       </div>
     </div>
   );

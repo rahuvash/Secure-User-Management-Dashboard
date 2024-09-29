@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { fetchUsers } from '../services/api';
-import { useNavigate } from 'react-router-dom';
-import UserCard from '../components/UserCard'; // Import the UserCard component
+import React, { useEffect, useState } from "react";
+import { fetchUsers } from "../services/api";
+import { useNavigate } from "react-router-dom";
+import UserCard from "../components/UserCard";
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
+
 
 const Dashboard = () => {
   const [users, setUsers] = useState<any[]>([]);
@@ -16,7 +19,7 @@ const Dashboard = () => {
         setUsers(data.data); // User data
         setTotalPages(data.total_pages); // Total pages for pagination
       } catch (error) {
-        console.error('Failed to fetch users:', error);
+        console.error("Failed to fetch users:", error);
       }
     };
 
@@ -24,8 +27,11 @@ const Dashboard = () => {
   }, [page]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
+    localStorage.removeItem("token");
+    toast("Logout Successfully. Redirecting to Login Page....")
+    setTimeout(() => {
+      navigate("/login");
+    }, 3000);
   };
 
   const handlePageChange = (newPage: number) => {
@@ -76,6 +82,7 @@ const Dashboard = () => {
           Next
         </button>
       </div>
+      <ToastContainer/>
     </div>
   );
 };

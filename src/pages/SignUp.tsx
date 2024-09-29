@@ -4,10 +4,11 @@ import { signUp } from '../services/api';
 import Form from '../components/Form';
 import Loader from '../components/Loader';
 import Modal from '../components/Modal';
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 
 const SignUp = () => {
   const navigate = useNavigate();
-
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -16,8 +17,16 @@ const SignUp = () => {
     setErrorMessage(''); // Clear previous errors
 
     try {
-      await signUp(email, password);
-      navigate('/login'); // Redirect to login after successful sign-up
+       const signupRes =await signUp(email, password);
+       if(signupRes){
+         
+         toast("Sign Up Succesfully.Redirecting to Login Page")
+         setTimeout(() => {
+          navigate('/login');
+         }, 3000);
+       }
+      
+      
     } catch (error) {
       console.error('Error signing up:', error);
       setErrorMessage('Failed to sign up. Please try again.'); // Set error message for modal
@@ -52,6 +61,8 @@ const SignUp = () => {
         {/* Error Modal */}
         {errorMessage && <Modal message={errorMessage} onClose={handleCloseModal} />}
       </div>
+
+      <ToastContainer />
     </div>
   );
 };
